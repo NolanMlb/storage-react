@@ -32,9 +32,9 @@ export const Bucket = () => {
         </div>
         <div className="col-lg-12">
             <div className="menu-toggle-btn mr-15">
-            <Link to={`/dashboard`} className="main-btn primary-btn btn-hover mb-10">
-                Retour à liste
-            </Link>
+                <Link to={`/buckets/${bucket.id}/addFile`} className="main-btn primary-btn btn-hover mb-10">
+                    Ajouter
+                </Link>
             </div>
         </div>
 

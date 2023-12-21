@@ -6,7 +6,8 @@ import { Dashboard } from './pages/Dashboard'
 import { Login } from './pages/Login'
 import { Signup } from './pages/Signup'
 import { SecureRoute } from './components/SecureRoute'
-import { AddBucket } from './pages/AddBucket'
+import { AddBucket } from './components/AddBucket'
+import { AddFile } from './components/AddFile'
 import { Bucket } from './pages/Bucket'
 import './assets/css/bootstrap.min.css'
 import './assets/css/lineicons.css'
@@ -34,6 +35,11 @@ const router = createBrowserRouter(
             <SecureRoute> 
               <Bucket/>
             </SecureRoute> 
+          }/>
+          <Route path='addFile' element={
+            <SecureRoute> 
+              <AddFile/>
+            </SecureRoute>  
           }/>
       </Route>
       <Route index element={<Login/>}/>
