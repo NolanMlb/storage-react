@@ -7,3 +7,7 @@ export const CreateBucket = (data) => {
 export const GetBuckets = () => {
     return instance.get("/buckets/");
 }
+
+export const GetBucketData = (id) => {
+    return instance.get(`/buckets/${id}`);
+}

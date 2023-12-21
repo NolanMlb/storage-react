@@ -4,7 +4,7 @@ export const Layout = () => {
     const userEmail = localStorage.getItem('user-email');
     return (
         <>
-        <aside className="sidebar-nav-wrapper">
+        <aside className="sidebar-nav-wrapper overflow-hidden">
         <div className="navbar-logo">
             <a href="index.html">
             BUCKET APP

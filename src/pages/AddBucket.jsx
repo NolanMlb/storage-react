@@ -29,12 +29,12 @@ export const AddBucket = () => {
         </div>
         <div className="col-lg-12">
             <div className="menu-toggle-btn mr-15">
-            <Link to={`/dashboard`} className="main-btn primary-btn btn-hover">
+            <Link to={`/dashboard`} className="main-btn primary-btn btn-hover mb-10">
                 Retour à liste
             </Link>
             </div>
             <div className="card-style mb-30">
-            <div className="table-wrapper table-responsive">
+            <div className="table-wrapper">
                 <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="row">
                     <div className="col-12">
