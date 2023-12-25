@@ -28,6 +28,10 @@ export const Bucket = () => {
             return "bi bi-filetype-pdf";
         } else if (file.label.split('.').pop() === 'xlsx') {
             return "bi bi-filetype-xlsx";
+        } else if (file.label.split('.').pop() === 'xml') {
+            return "bi bi-filetype-xml";
+        } else if (file.label.split('.').pop() === 'jpg') {
+            return "bi bi-filetype-jpg";
         } else {
             return "bi bi-file-earmark";
         }
