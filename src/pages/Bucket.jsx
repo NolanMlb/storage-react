@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { GetBucketData } from "../services/BucketService";
+import { AddFile } from '../components/AddFile';
 
 export const Bucket = () => {
     const [bucket, setBucket] = useState([]);
@@ -19,6 +20,19 @@ export const Bucket = () => {
 
         fetchBuckets();
     }, []);
+
+    const getIcon = (file) => {
+        if (file.label.split('.').pop() === 'png') {
+            return "bi bi-filetype-png";
+        } else if (file.label.split('.').pop() === 'pdf') {
+            return "bi bi-filetype-pdf";
+        } else if (file.label.split('.').pop() === 'xlsx') {
+            return "bi bi-filetype-xlsx";
+        } else {
+            return "bi bi-file-earmark";
+        }
+    }
+
     return (
         <>
         <div className="title-wrapper pt-30">
@@ -32,9 +46,7 @@ export const Bucket = () => {
         </div>
         <div className="col-lg-12">
             <div className="menu-toggle-btn mr-15">
-                <Link to={`/buckets/${bucket.id}/addFile`} className="main-btn primary-btn btn-hover mb-10">
-                    Ajouter
-                </Link>
+                <AddFile bucketId={idBucket}/>
             </div>
         </div>
 
@@ -47,13 +59,7 @@ export const Bucket = () => {
                                 <div className="row icon-card mb-10" role='button'>
                                     <div className="col mb-20 d-flex justify-content-center">
                                         <div className='icon blue'>
-                                            {file.label.split('.').pop() === 'png' ? (
-                                                <i className="bi bi-filetype-png" style={{fontSize: '3rem'}} />
-                                            ) : file.label.split('.').pop() === 'pdf' ?(
-                                                <i className="bi bi-filetype-pdf" style={{fontSize: '3rem'}} />
-                                            ) : (
-                                                <i className="bi bi-file-earmark" style={{fontSize: '3rem'}} />
-                                            )}
+                                            <i className={getIcon(file)} style={{fontSize: '3rem'}} />
                                         </div>
                                     </div>
                                     <div className="col content">
