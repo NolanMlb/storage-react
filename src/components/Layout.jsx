@@ -6,7 +6,7 @@ export const Layout = () => {
         <>
         <aside className="sidebar-nav-wrapper overflow-hidden">
             <div className="navbar-logo">
-                <a href="index.html">
+                <a href="/dashboard">
                 BUCKET APP
                 </a>
             </div>

@@ -5,7 +5,7 @@ function getLocalAccessToken() {
     return accessToken;
 }
 const instance = axios.create({
-    baseURL: "/api",
+    baseURL: `http://${import.meta.env.VITE_SPRING_HOST}:${import.meta.env.VITE_SPRING_PORT}/api`,
     headers: {
       "Content-Type": "application/json",
     },
