@@ -8,3 +8,7 @@ export const UploadFile = (bucketId, data) => {
     };
     return instance.post(`/buckets/${bucketId}/file`, data, config);
 }
+
+export const getFile = (fileName) => {
+    return instance.get(`/files/${fileName}`);
+}

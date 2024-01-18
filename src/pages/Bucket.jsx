@@ -1,12 +1,13 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { GetBucketData } from "../services/BucketService";
 import { AddFile } from '../components/AddFile';
+import { getFile } from '../services/FileService';
 
 export const Bucket = () => {
     const [bucket, setBucket] = useState([]);
     const { idBucket } = useParams();
+    const [fileUrl, setFileUrl] = useState(null);
 
     useEffect(() => {
         const fetchBuckets = async () => {
@@ -20,6 +21,13 @@ export const Bucket = () => {
 
         fetchBuckets();
     }, []);
+
+    const openFile = async (fileName) => {
+        const response = await getFile(fileName);
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        setFileUrl(URL.createObjectURL(blob));
+        // window.open(fileUrl);
+    }
 
     const getIcon = (file) => {
         if (file.label.split('.').pop() === 'png') {
@@ -56,27 +64,26 @@ export const Bucket = () => {
 
         <div className="card-style mb-30">
             {bucket.files && bucket.files.length > 0 ? (
-                <div className="row">
+                <div className="row row-cols-2">
                     {bucket.files.map((file) => (
-                        <div key={file.id}>
-                            <Link to={`/buckets/${file.id}`} >
-                                <div className="row icon-card mb-10" role='button'>
-                                    <div className="col mb-20 d-flex justify-content-center">
-                                        <div className='icon blue'>
-                                            <i className={getIcon(file)} style={{fontSize: '3rem'}} />
-                                        </div>
-                                    </div>
-                                    <div className="col content">
-                                        <h6 className="mb-10">{file.label}</h6>
+                        <div onClick={() => openFile(file.label)} key={file.id}>
+                            <div className="col icon-card mb-10" role='button'>
+                                <div className="col mb-20 d-flex justify-content-center">
+                                    <div className='icon blue'>
+                                        <i className={getIcon(file)} style={{fontSize: '3rem'}} />
                                     </div>
                                 </div>
-                            </Link>
+                                <div className="col content">
+                                    <h6 className="mb-10">{file.label}</h6>
+                                </div>
+                            </div>
                         </div>
                     ))}
                 </div>
             ) : (
                 <p>Pas de fichiers dans ce bucket.</p>
             )}
+            {fileUrl && <iframe src={fileUrl} style={{ width: '100%', height: '100vh' }} />}
         </div>
         </>
     );

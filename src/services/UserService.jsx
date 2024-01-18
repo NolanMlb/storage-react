@@ -7,7 +7,3 @@ export const Authenticate = (data) => {
 export const CreateAccount = (data) => {
     return instance.post("/users/", data);
 }
-
-export const refreshToken = (expiredToken) => {
-    return instance.post("/users/token", { expiredToken: expiredToken });
-}
