@@ -22,6 +22,13 @@ export const Bucket = () => {
         fetchBuckets();
     }, []);
 
+    const handleFileUpload = (uploadedFiles) => {
+        setBucket(prevBucket => ({
+            ...prevBucket,
+            files: [...prevBucket.files, ...uploadedFiles]
+        }));
+    };
+
     const openFile = async (fileName) => {
         const response = await getFile(fileName);
         const blob = new Blob([response.data], { type: 'application/pdf' });
@@ -58,7 +65,7 @@ export const Bucket = () => {
         </div>
         <div className="col-lg-12">
             <div className="menu-toggle-btn mr-15">
-                <AddFile bucketId={idBucket}/>
+                <AddFile idBucket={idBucket} onFileUpload={handleFileUpload}/>
             </div>
         </div>
 

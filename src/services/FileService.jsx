@@ -6,7 +6,7 @@ export const UploadFile = (bucketId, data) => {
             'Content-Type': 'multipart/form-data'
         }
     };
-    return instance.post(`/buckets/${bucketId}/file`, data, config);
+    return instance.post(`/buckets/${bucketId}/files`, data, config);
 }
 
 export const getFile = (fileName) => {
