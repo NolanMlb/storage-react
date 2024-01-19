@@ -13,6 +13,7 @@ export const Login = () => {
         const response  = await Authenticate(data);
         localStorage.clear();
         localStorage.setItem('user-token',response.data.token);
+        localStorage.setItem('user-refresh-token',response.data.refreshToken);
         localStorage.setItem('user-email',response.data.email);
         setTimeout(() => {
             navigate('/dashboard');
