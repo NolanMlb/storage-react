@@ -1,4 +1,4 @@
-import { UploadFile } from "../services/FileService"; // Adjust this import based on your actual service
+import { UploadFile } from "../services/FileService";
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 
@@ -7,7 +7,6 @@ export const AddFile = ({idBucket, onFileUpload}) => {
         idBucket: PropTypes.string.isRequired,
         onFileUpload: PropTypes.func.isRequired
     };
-    // const navigate = useNavigate();
     const [dragStatus, setDragStatus] = useState('Glissez et déposez vos fichiers ici');
 
     const handleDrop = async (e) => {
