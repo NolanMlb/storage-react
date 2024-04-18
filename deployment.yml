@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storageappdeployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: storageappreact
+  template:
+    metadata:
+      labels:
+        app: storageappreact
+    spec:
+      containers:
+      - name: storageappreact
+        image: storageappreact:1.0.0
+        ports:
+        - containerPort: 80
