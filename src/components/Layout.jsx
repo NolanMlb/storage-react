@@ -1,7 +1,17 @@
 import { Outlet, Link } from "react-router-dom";
+import { Disconnect } from "../services/UserService";
 
 export const Layout = () => {
     const userEmail = localStorage.getItem('user-email');
+
+    const logoutUser = () => {
+        Disconnect().then(() => {
+            localStorage.clear();
+            window.location.href = '/';
+        }).catch((error) => {
+            console.error('Error logging out', error);
+        });
+    }
     return (
         <>
         <aside className="sidebar-nav-wrapper overflow-hidden">
@@ -34,7 +44,7 @@ export const Layout = () => {
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col-lg-12 col-md-12 col-6">
-                            <div className="header-right">
+                            <div className="header-right col-auto">
                                 <div className="profile-box ml-15">
                                     <button className="dropdown-toggle bg-transparent border-0" type="button" id="profile"
                                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -49,6 +59,9 @@ export const Layout = () => {
                                                 </div>
                                             </div>
                                         </div>
+                                    </button>
+                                    <button type="button" className="btn bg-transparent border-0" onClick={logoutUser}>
+                                        <i className="bi bi-box-arrow-right"></i>
                                     </button>
                                 </div>
                             </div>
