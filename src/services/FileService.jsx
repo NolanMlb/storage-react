@@ -12,3 +12,7 @@ export const UploadFile = (bucketId, data) => {
 export const getFile = (fileName) => {
     return instance.get(`/files/${fileName}`);
 }
+
+export const deleteFile = (bucketId, fileId) => {
+    return instance.delete(`/buckets/${bucketId}/files/${fileId}`);
+}

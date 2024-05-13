@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { GetBucketData } from "../services/BucketService";
 import { AddFile } from '../components/AddFile';
-import { getFile } from '../services/FileService';
+import { getFile, deleteFile } from '../services/FileService';
 
 export const Bucket = () => {
     const [bucket, setBucket] = useState([]);
@@ -32,8 +32,17 @@ export const Bucket = () => {
     const openFile = async (fileName) => {
         const response = await getFile(fileName);
         const blob = new Blob([response.data], { type: 'application/pdf' });
-        setFileUrl(URL.createObjectURL(blob));
-        // window.open(fileUrl);
+        const objectURL = URL.createObjectURL(blob);
+        setFileUrl(objectURL);
+    }
+
+    const removeFile = async (fileId) => {
+        await deleteFile(idBucket, fileId).then(() => {
+            setBucket(prevBucket => ({
+                ...prevBucket,
+                files: prevBucket.files.filter(file => file.id !== fileId)
+            }));
+        });
     }
 
     const getIcon = (file) => {
@@ -73,15 +82,18 @@ export const Bucket = () => {
             {bucket.files && bucket.files.length > 0 ? (
                 <div className="row row-cols-2">
                     {bucket.files.map((file) => (
-                        <div onClick={() => openFile(file.label)} key={file.id}>
+                        <div key={file.id}>
                             <div className="col icon-card mb-10" role='button'>
                                 <div className="col mb-20 d-flex justify-content-center">
                                     <div className='icon blue'>
                                         <i className={getIcon(file)} style={{fontSize: '3rem'}} />
                                     </div>
                                 </div>
-                                <div className="col content">
+                                <div className="col content" onClick={() => openFile(file.label)}>
                                     <h6 className="mb-10">{file.label}</h6>
+                                </div>
+                                <div className="col content">
+                                    <button onClick={() => removeFile(file.id)}>Delete</button>
                                 </div>
                             </div>
                         </div>
