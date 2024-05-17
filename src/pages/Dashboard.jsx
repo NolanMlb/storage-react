@@ -21,10 +21,10 @@ export const Dashboard = () => {
     return (
         <div>
             <div className="title-wrapper pt-30">
-                <div className="row align-items-center">
+                <div className="row align-items-center justify-content-center">
                     <div className="col-md-6">
-                        <div className="title">
-                            <h2>Dossiers</h2>
+                        <div className="title text-center">
+                            <h2>Vos dossiers</h2>
                         </div>
                     </div>
                     <div className="menu-toggle-btn mr-15">

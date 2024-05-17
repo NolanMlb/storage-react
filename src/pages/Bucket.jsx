@@ -72,17 +72,18 @@ export const Bucket = () => {
     }
 
     const getIcon = (file) => {
-        if (file.label.split('.').pop() === 'png') {
+        switch (file.extension) {
+            case 'png':
             return "bi bi-filetype-png";
-        } else if (file.label.split('.').pop() === 'pdf') {
+            case 'pdf':
             return "bi bi-filetype-pdf";
-        } else if (file.label.split('.').pop() === 'xlsx') {
+            case 'xlsx':
             return "bi bi-filetype-xlsx";
-        } else if (file.label.split('.').pop() === 'xml') {
+            case 'xml':
             return "bi bi-filetype-xml";
-        } else if (file.label.split('.').pop() === 'jpg') {
+            case 'jpg':
             return "bi bi-filetype-jpg";
-        } else {
+            default:
             return "bi bi-file-earmark";
         }
     }
@@ -99,7 +100,7 @@ export const Bucket = () => {
     };
 
     return (
-        <div className='bg-primary'>
+        <div>
             <div className="title-wrapper pt-30">
                 <div className="row align-items-center">
                     <div>
