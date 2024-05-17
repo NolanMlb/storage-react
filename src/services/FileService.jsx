@@ -10,7 +10,7 @@ export const UploadFile = (bucketId, data) => {
 }
 
 export const getFile = (fileName) => {
-    return instance.get(`/files/${fileName}`);
+    return instance.get(`/files/${fileName}`, { responseType: 'blob' });
 }
 
 export const deleteFile = (bucketId, fileId) => {

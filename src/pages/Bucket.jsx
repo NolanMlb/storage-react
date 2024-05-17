@@ -8,6 +8,9 @@ export const Bucket = () => {
     const [bucket, setBucket] = useState([]);
     const { idBucket } = useParams();
     const [fileUrl, setFileUrl] = useState(null);
+    const [fileType, setFileType] = useState('');
+    const [fileContent, setFileContent] = useState(null);
+    const defaultImageType = ['application/png', 'application/jpg'];
 
     useEffect(() => {
         const fetchBuckets = async () => {
@@ -29,12 +32,35 @@ export const Bucket = () => {
         }));
     };
 
-    const openFile = async (fileName) => {
-        const response = await getFile(fileName);
-        const blob = new Blob([response.data], { type: 'application/pdf' });
-        const objectURL = URL.createObjectURL(blob);
-        setFileUrl(objectURL);
+    const resetFileData = () => {
+        setFileUrl(null);
+        setFileType('');
+        setFileContent(null);
     }
+
+    const openFile = async (fileName, fileExtension) => {
+        try {
+            resetFileData();
+            const response = await getFile(fileName + '.' + fileExtension);
+            const file = new Blob([response.data], { type: `application/${fileExtension}` });
+            const objectURL = URL.createObjectURL(file);
+            setFileUrl(objectURL);
+            const reader = new FileReader();
+            reader.onloadend = function() {
+                setFileContent(reader.result);
+                setFileType(file.type);
+            };
+            if (defaultImageType.includes(file.type)) {
+                reader.readAsDataURL(file);
+            } else if (file.type === 'application/pdf') {
+                reader.readAsArrayBuffer(file);
+            } else {
+                reader.readAsText(file); // Fallback if it's neither an image nor PDF
+            }
+        } catch (error) {
+            console.error('Error opening file', error);
+        }
+    };
 
     const removeFile = async (fileId) => {
         await deleteFile(idBucket, fileId).then(() => {
@@ -61,49 +87,72 @@ export const Bucket = () => {
         }
     }
 
-    return (
-        <>
-        <div className="title-wrapper pt-30">
-            <div className="row align-items-center">
-            <div>
-                <div className="title">
-                <h2>Vos fichiers</h2>
-                </div>
-            </div>
-            </div>
-        </div>
-        <div className="col-lg-12">
-            <div className="menu-toggle-btn mr-15">
-                <AddFile idBucket={idBucket} onFileUpload={handleFileUpload}/>
-            </div>
-        </div>
+    const renderFileContent = () => {
+        if (!fileContent) return null;
+        if (defaultImageType.includes(fileType)) {
+            return <img src={fileContent} alt="File content" style={{ width: '100%' }} />;
+        } else if (fileType === 'application/pdf') {
+            return <embed src={fileUrl} style={{ width: '100%', height: '100vh' }}/>;
+        } else {
+            return <textarea value={fileContent} readOnly style={{ width: '100%', height: '100vh' }} />;
+        }
+    };
 
-        <div className="card-style mb-30">
-            {bucket.files && bucket.files.length > 0 ? (
-                <div className="row row-cols-2">
-                    {bucket.files.map((file) => (
-                        <div key={file.id}>
-                            <div className="col icon-card mb-10" role='button'>
-                                <div className="col mb-20 d-flex justify-content-center">
-                                    <div className='icon blue'>
-                                        <i className={getIcon(file)} style={{fontSize: '3rem'}} />
-                                    </div>
-                                </div>
-                                <div className="col content" onClick={() => openFile(file.label)}>
-                                    <h6 className="mb-10">{file.label}</h6>
-                                </div>
-                                <div className="col content">
-                                    <button onClick={() => removeFile(file.id)}>Delete</button>
-                                </div>
-                            </div>
+    return (
+        <div className='bg-primary'>
+            <div className="title-wrapper pt-30">
+                <div className="row align-items-center">
+                    <div>
+                        <div className="title">
+                        <h2>Vos fichiers</h2>
                         </div>
-                    ))}
+                    </div>
                 </div>
-            ) : (
-                <p>Pas de fichiers dans ce bucket.</p>
-            )}
-            {fileUrl && <iframe src={fileUrl} style={{ width: '100%', height: '100vh' }} />}
+            </div>
+            <div className="col-lg-12">
+                <div className="menu-toggle-btn mr-15">
+                    <AddFile idBucket={idBucket} onFileUpload={handleFileUpload}/>
+                </div>
+            </div>
+
+            <div className="card-style mb-30">
+                <table className="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Icône</th>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Taille</th>
+                            <th scope="col">Date de création</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {bucket.files && bucket.files.length > 0 ? (
+                            bucket.files.map((file) => (
+                                <tr key={file.id} onClick={() => openFile(file.createdAt, file.extension)} style={{ cursor: 'pointer' }} className="hover:bg-gray-200">
+                                    <td className='text-primary'>
+                                        <i className={getIcon(file)} style={{fontSize: '2rem'}} />
+                                    </td>
+                                    <th>{file.label.split('.').shift()}</th>
+                                    <td>{file.extension}</td>
+                                    <td>{file.size} Ko</td>
+                                    <td>{file.createdAt}</td>
+                                    <td>
+                                        <button onClick={() => removeFile(file.id)} className='btn btn-danger'>
+                                            <i className="bi bi-trash" />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="4">Pas de fichiers dans ce bucket.</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+            {fileContent && renderFileContent()}
         </div>
-        </>
     );
 }

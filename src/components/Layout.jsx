@@ -71,7 +71,7 @@ export const Layout = () => {
             </header>
             <section className="section">
                 <div className="container-fluid">
-                <Outlet/>
+                    <Outlet/>
                 </div>
             </section>
             <footer className="footer">
