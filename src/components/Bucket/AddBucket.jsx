@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
-import { CreateBucket } from "../services/BucketService";
+import { CreateBucket } from "../../services/BucketService";
 
 export const AddBucket = () => {
     const {
