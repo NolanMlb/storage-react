@@ -10,6 +10,7 @@ export const Bucket = () => {
     const [fileUrl, setFileUrl] = useState(null);
     const [fileType, setFileType] = useState('');
     const [fileContent, setFileContent] = useState(null);
+    const [openedFileId, setOpenedFileId] = useState(null);
     const defaultImageType = ['application/png', 'application/jpg'];
 
     useEffect(() => {
@@ -36,12 +37,13 @@ export const Bucket = () => {
         setFileUrl(null);
         setFileType('');
         setFileContent(null);
+        setOpenedFileId(null);
     }
 
-    const openFile = async (fileName, fileExtension) => {
+    const openFile = async (fileId, fileExtension) => {
         try {
             resetFileData();
-            const response = await getFile(fileName + '.' + fileExtension);
+            const response = await getFile(fileId);
             const file = new Blob([response.data], { type: `application/${fileExtension}` });
             const objectURL = URL.createObjectURL(file);
             setFileUrl(objectURL);
@@ -57,12 +59,14 @@ export const Bucket = () => {
             } else {
                 reader.readAsText(file); // Fallback if it's neither an image nor PDF
             }
+            setOpenedFileId(fileId);
         } catch (error) {
             console.error('Error opening file', error);
         }
     };
 
     const removeFile = async (fileId) => {
+        resetFileData();
         await deleteFile(idBucket, fileId).then(() => {
             setBucket(prevBucket => ({
                 ...prevBucket,
@@ -130,7 +134,7 @@ export const Bucket = () => {
                     <tbody>
                         {bucket.files && bucket.files.length > 0 ? (
                             bucket.files.map((file) => (
-                                <tr key={file.id} onClick={() => openFile(file.createdAt, file.extension)} style={{ cursor: 'pointer' }} className="hover:bg-gray-200">
+                                <tr key={file.id}>
                                     <td className='text-primary'>
                                         <i className={getIcon(file)} style={{fontSize: '2rem'}} />
                                     </td>
@@ -139,6 +143,18 @@ export const Bucket = () => {
                                     <td>{file.size} Ko</td>
                                     <td>{file.createdAt}</td>
                                     <td>
+                                        <button
+                                         onClick={() => openedFileId === file.id ? resetFileData() : openFile(file.id, file.extension)}
+                                         className='btn btn-primary'
+                                         style={{ margin: '10px' }}
+                                        >
+                                            {openedFileId === file.id ? (
+                                                <i className="bi bi-x" />
+                                            ) : (
+                                                <i className="bi bi-eye" />
+                                            
+                                            )}
+                                        </button>
                                         <button onClick={() => removeFile(file.id)} className='btn btn-danger'>
                                             <i className="bi bi-trash" />
                                         </button>
