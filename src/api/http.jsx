@@ -10,7 +10,7 @@ function getLocalRefreshToken() {
     return refreshToken;
 }
 const instance = axios.create({
-    baseURL: `http://${import.meta.env.VITE_SPRING_HOST}:${import.meta.env.VITE_SPRING_PORT}/api`,
+    baseURL: `https://storageapp.com/api`,
     headers: {
       "Content-Type": "application/json",
     },
